@@ -151,7 +151,11 @@ class Comment(ApiModel):
 
     @classmethod
     def object_from_dictionary(cls, entry):
-        user = User.object_from_dictionary(entry['from'])
+        from_entry = entry['from']
+        if 'id' not in list(from_entry.keys()):
+            from_entry['id'] = from_entry['username']
+
+        user = User.object_from_dictionary(from_entry)
         text = entry['text']
         created_at = timestamp_to_datetime(entry['created_time'])
         id = entry['id']
